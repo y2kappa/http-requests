@@ -1,0 +1,4 @@
+(test
+ (name test_utils)
+ (modules test_utils)
+ (libraries http_utils ounit))
