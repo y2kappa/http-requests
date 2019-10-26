@@ -1,4 +1,8 @@
 (test
  (name test_utils)
  (modules test_utils)
- (libraries http_utils ounit))
+ (preprocess (pps ppx_deriving.show))
+ (libraries
+    http_utils
+    ounit
+    ppx_deriving))

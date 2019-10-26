@@ -1,3 +1,6 @@
 (library
  (name        http_utils)
- (libraries ))
+ (preprocess (pps ppx_deriving.show))
+ (libraries
+    str
+    ppx_deriving))
