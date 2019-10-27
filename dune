@@ -1,9 +1,11 @@
 (executables
- (names lwt_http)
- (modules lwt_http)
+ (names main)
+ (modules main)
  (preprocess (pps lwt_ppx ppx_deriving.show))
  (libraries
     http_utils
+    http_types
+    http_requester
     common
     lwt_ppx
     lwt

@@ -1,5 +1,7 @@
 open OUnit2
 module P = Printf
+
+module T = Http_types
 module U = Http_utils
 module C = Common
 
@@ -13,19 +15,38 @@ let test_args _ =
 let test_parse _ =
   let address = "http://localhost:5000/sum" in
   let expected =
-    Http_utils.{
+    T.{
       host = "localhost";
-      route = Some "sum";
+      route = Some "/sum";
       port = Some 5000
     }
   in
   let expected = Some expected in
-  let actual = U.parse_http_address address in
+  let actual = U.address_of_string address in
 
-  (* printf "\n%s\n" (U.address_opt_to_string expected);
-  printf "%s\n" (U.address_opt_to_string actual); *)
+  (* P.printf "\n%s\n" (U.string_of_address expected);
+  P.printf "%s\n" (U.string_of_address actual); *)
 
   assert_equal actual expected
+
+
+
+  let test_parse_two _ =
+    let address = "postman-echo.com/get" in
+    let expected =
+      T.{
+        host = "postman-echo.com";
+        route = Some "/get";
+        port = None
+      }
+    in
+    let expected = Some expected in
+    let actual = U.address_of_string address in
+
+    (* P.printf "\n%s\n" (U.string_of_address expected);
+    P.printf "%s\n" (U.string_of_address actual); *)
+
+    assert_equal actual expected
 
 let test_value_or _ =
 
@@ -35,6 +56,7 @@ let test_value_or _ =
 let tests = "tests" >::: [
   "test_args"  >:: test_args;
   "test_parse"  >:: test_parse;
+  "test_parse_two"  >:: test_parse_two;
   "test_value_or"  >:: test_value_or;
 ]
 

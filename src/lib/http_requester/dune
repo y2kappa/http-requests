@@ -1,9 +1,10 @@
 (library
- (name        http_utils)
+ (name        http_requester)
   (preprocess (pps lwt_ppx ppx_deriving.show))
  (libraries
     common
     http_types
+    http_utils
     lwt
     lwt.unix
     str

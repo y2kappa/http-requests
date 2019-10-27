@@ -1,0 +1,7 @@
+(library
+ (name common)
+ (preprocess
+   (pps ppx_deriving.show))
+ (libraries
+    str
+    ppx_deriving))

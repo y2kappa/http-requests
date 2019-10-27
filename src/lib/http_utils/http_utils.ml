@@ -1,3 +1,7 @@
+module P = Printf
+module C = Common
+module T = Http_types
+
 let args_to_string args =
 
   (*
@@ -23,21 +27,13 @@ let args_to_string args =
   | _ -> to_string ()
 
 
-type address =
-  {
-    host: string;
-    route: string option;
-    port: int option
-  }
-  [@@deriving show]
-
-let address_opt_to_string address_opt =
-  match address_opt with
+let string_of_address address =
+  match address with
   | None -> "None"
   | Some address ->
-    (show_address address)
+    (T.show_address address)
 
-let parse_http_address address : address option =
+let address_of_string address : T.address option =
 
   (*
 
@@ -66,7 +62,12 @@ let parse_http_address address : address option =
 
   let (host_and_port, route) = match String.split_on_char '/' address with
     | [x] -> (Some x, None)
-    | hd::tl -> (Some hd, Some(String.concat "/" tl))
+    | host_port::route ->
+      let route = match route with
+        | [root] -> "/" ^ root
+        | deep_route -> String.concat "/" deep_route
+      in
+      (Some host_port, Some route)
     | _ -> (None, None)
   in
 
@@ -82,3 +83,41 @@ let parse_http_address address : address option =
   match host, route, port with
   | Some h, _, _ -> Some ({host=h; route; port})
   | _ -> None
+
+
+let address_to_socket ~host ~port =
+
+  (*
+  TODO:
+  - implement async operator like: let%async res = expr in
+  - implement await operator like: let res = await @@ expr in
+  *)
+
+  let%lwt addresses = Lwt_unix.getaddrinfo host (string_of_int port) [] in
+  let address = List.hd addresses in
+  let address = address.ai_addr in
+
+  (* Debug printing *)
+  let address_str = match address with
+    | ADDR_UNIX (address) -> address
+    | ADDR_INET (inetaddr, port) ->
+      P.sprintf "%s:%d"
+      (Unix.string_of_inet_addr inetaddr) port
+  in
+
+  P.printf "[DEBUG] Resolved to: %s \n" address_str;
+  Lwt.return address
+
+let build_headers args (target:T.address) =
+  let str_args = args_to_string args in
+  let route = C.value_or target.route "/" in
+  [
+    "GET " ^ route ^ str_args ^ " HTTP/1.1";
+    "Host: " ^ target.host;
+    "User-Agent: curl/7.49.0";
+    "X-Forwarded-Port: 443";
+    "X-Forwarded-Proto: https";
+    "Accept: */*";
+    "Connection: close\r\n\r\n";
+  ]
+  |> String.concat "\r\n"
