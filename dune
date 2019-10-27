@@ -1,5 +1,9 @@
 (executables
  (names lwt_http)
  (modules lwt_http)
- (preprocess (pps lwt_ppx))
- (libraries lwt_ppx lwt lwt.unix))
+ (preprocess (pps lwt_ppx ppx_deriving.show))
+ (libraries
+    http_utils
+    lwt_ppx
+    lwt
+    lwt.unix))

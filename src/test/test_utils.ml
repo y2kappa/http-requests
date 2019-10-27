@@ -5,7 +5,7 @@ module U = Http_utils
 let test_args _ =
   let args = [("",""); ("a","b"); ("c", "d"); ("", "a"); ("", ""); ("z", "")] in
   let expected = "?a=b&c=d" in
-  let actual = Http_utils.args_to_string args in
+  let actual = U.args_to_string args in
   assert_equal actual expected
 
 let test_parse _ =
