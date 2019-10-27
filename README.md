@@ -23,3 +23,12 @@ $ dune runtest
 Ran: 3 tests in: 0.00 seconds.
 OK
 ```
+
+## TODO
+
+- [ ] split response into headers & body
+- [ ] use json
+
+## References
+
+- https://github.com/ocsigen/lwt
