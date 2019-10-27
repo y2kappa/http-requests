@@ -1,15 +1,15 @@
 
 module P = Printf
 module U = Http_utils
+module C = Common
 
 (*
   Inspiration from https://github.com/ocsigen/lwt
+  TODO:
+  - split response into headers & body
+  - make it json
 *)
 
-let value_or option_ or_ =
-  match option_ with
-  | Some value -> value
-  | None -> or_
 
 let address_to_socket ~host ~port =
 
@@ -49,7 +49,7 @@ let (>>=) option_ continuation_ =
 
 let build_headers args (target:U.address) =
   let str_args = U.args_to_string args in
-  let route = value_or target.route "/" in
+  let route = C.value_or target.route "/" in
   [
     "GET " ^ route ^ str_args ^ " HTTP/1.1";
     "Host: " ^ target.host;
@@ -65,7 +65,7 @@ let build_headers args (target:U.address) =
 let get ~address ~args =
 
   U.parse_http_address address >>= fun target ->
-  let port = value_or target.port 80 in
+  let port = C.value_or target.port 80 in
   let%lwt socket = address_to_socket ~host:target.host ~port in
   let headers = build_headers args target in
 

@@ -4,5 +4,6 @@
  (preprocess (pps ppx_deriving.show))
  (libraries
     http_utils
+    common
     ounit
     ppx_deriving))

@@ -4,6 +4,7 @@
  (preprocess (pps lwt_ppx ppx_deriving.show))
  (libraries
     http_utils
+    common
     lwt_ppx
     lwt
     lwt.unix))
