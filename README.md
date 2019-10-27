@@ -1,13 +1,20 @@
 # Lighweight HTTP request library
 
 ```OCaml
-let%lwt response = H.get
-    ~address:"localhost:5000/sum"
-    ~args:[("x", "10"); ("y", "3")]
+let%lwt response =
+    H.get ~address:"localhost/route" ~args:[("arg1", "10")]
 in
 
 print_endline (T.to_string response);
 ```
+
+or (without ppx extensions)
+
+```OCaml
+H.get ~address:"http://google.com" ~args:[] >>= fun resp ->
+print_endline (T.to_string resp)
+```
+
 
 ## Build / Run / Test
 
