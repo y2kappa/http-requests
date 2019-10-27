@@ -17,7 +17,7 @@ let get ~address ~args =
   let%lwt socket = U.address_to_socket ~host:target.host ~port in
   let headers = U.build_headers args target in
 
-  P.printf "Headers \n\n%s\n\n" headers;
+  (* P.printf "Headers \n\n%s\n\n" headers; *)
 
   let request = Lwt_io.(with_connection socket (fun (incoming, outgoing) ->
     let%lwt () = write outgoing headers in

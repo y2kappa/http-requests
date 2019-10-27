@@ -14,7 +14,8 @@ print_endline (T.to_string response);
 ```sh
 $ dune build main.exe
 $ ./_build/default/main.exe
-
+(Http_types.Response
+   "HTTP/1.1 200 OK\r\nContent-Type: application/json; charset=utf-8\r\nDate: Sun, 27 Oct 2019 01:01:47 GMT\r\nETag: W/...0\"},\"url\":\"https://postman-echo.com/get?x=10&y=3\"}")
 
 $ dune runtest
   test_utils alias src/test/runtest
